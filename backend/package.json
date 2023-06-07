@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "testJest": "npx jest"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +20,8 @@
     "jwks-rsa": "^3.0.1",
     "mongoose": "^7.0.4",
     "nodemon": "^1.19.4"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }

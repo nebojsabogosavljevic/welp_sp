@@ -11,11 +11,14 @@
                 </div>
                 <div class="row">
                     <label for="password">Password </label>
-                    <input type="text" name="password" v-model="password">
+                    <input type="password" name="password" v-model="password">
                 </div>
                 <button class="btn-post">Login</button>
              </form>
        </div>
+        <ui-alert @dismiss="showAlert4 = false" type="error" v-show="wrongPassword">
+            Wrong Password. Please try again!
+        </ui-alert>
     </div>
 </template>
 
@@ -38,6 +41,7 @@ export default {
             username: '',
             password: '',
             userType: '',
+            wrongPassword: false
         }
     },
     computed: {
@@ -51,7 +55,10 @@ export default {
                 this.showSuccess('Login Successful')
                 this.setUserObj({ username: this.username, userType: this.userType.toLowerCase() })
             } else {
-                alert(`Login Failed: ${response.message}`)
+                this.wrongPassword = true
+                setTimeout(() => {
+                    this.wrongPassword = false
+                }, 3000)
                 return;
             }
             this.loginSetData({user: this.username, token: response?.token, userType: this.userType});

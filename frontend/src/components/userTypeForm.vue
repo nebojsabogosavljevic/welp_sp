@@ -2,25 +2,25 @@
     <div>
         <!-- <headLine/> -->
         <div class="form-div">
-            <h4>Register as:</h4>
+            <h4>Account Type:</h4>
             <div class="wrapper-pick-user-type">
                 <button class="user-type-box" @click="setUserType('Employee')">
                     <div>
-                        <p>Employee</p>
+                        <div><p>Employee</p></div>
                         <ul>
-                            <li>Employ people</li>
-                            <li>Unlimited ..</li>
-                            <li>Test..</li>
+                            <li>Work as much as you want!</li>
+                            <li>Earn More!</li>
+                            <li>Help someone</li>
                         </ul>
                     </div>
                 </button>
                 <button class="user-type-box" @click="setUserType('Employer')">
                     <div>
-                        <p>Employer</p>
+                        <div><p>Employer</p></div>
                         <ul>
-                            <li>Work as much as you want</li>
-                            <li>Work as much as you want</li>
-                            <li>Work as much as you want</li>
+                            <li>Employ people</li>
+                            <li>increase your productivity</li>
+                            <li>Give work opportunitie</li>
                         </ul>
                     </div>
                 </button>

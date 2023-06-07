@@ -5,41 +5,67 @@
       <table id="customers">
         <tr>
           <th>Title</th>
-          <th>Duration</th>
+          <th>Duration (h)</th>
           <th>Hardness</th>
           <th>Location</th>
-          <th>Earn Rate</th>
+          <th>Earn Rate (€/h)</th>
           <th v-if="getUserType === 'employee'">Apply for Job</th>
           <th v-if="getUserType === 'employer'">Edit Job</th>
           <th v-if="getUserType === 'employer'">Remove Job</th>
+          <th v-if="getUserType === 'employer'">Applicants</th>
         </tr>
         <tr v-for="job in jobAdds" :key="job._id">
           <td>{{job.Title}}</td>
           <td>{{job.Duration}}</td>
-          <td>{{job.Hardness}}</td>
+          <td>{{job.Hardness}} <star-rating :number-of-stars="Number(job.Hardness.split('/')[0])" /></td>
           <td>{{job.Location}}</td>
-          <td>{{job.Salary}}</td>
+          <td>{{job.Salary}}€</td>
           <td v-if="getUserType === 'employer'">
-            <router-link :to="{ path: `editJob/${job._id}`, params: { jobData: job }, query: { ...job } }"><button >Edit</button></router-link>
+            <router-link :to="{ path: `editJob/${job._id}`, params: { jobData: job }, query: { ...job } }"><ui-button raised :size="size" type="secondary">Edit</ui-button></router-link>
           </td>
           <td v-if="getUserType === 'employer'">
-            <button class="" @click="deleteJob(job._id)" v-on:keyup.delete="deleteJob(job._id)">Remove</button>
+            <ui-button color="red" raised :size="sm" type="secondary" @click="deleteJob(job._id)" v-on:keyup.delete="deleteJob(job._id)">Remove</ui-button>
+          </td>
+          <td v-if="getUserType === 'employer'">
+            <ui-button color="green" raised :size="size" type="secondary" @click="openModal('modal6', job.Applicants)">Applicants</ui-button>
           </td>
           <td v-if="getUserType === 'employee' && !appliedToJob(job.Applicants)">
-            <button @click="applyForJob(job._id)">Apply</button>
+            <ui-button @click="applyForJob(job._id)" color="green" :size="size">Apply</ui-button>
           </td>
           <td v-if="getUserType === 'employee' && appliedToJob(job.Applicants)">
-            <button @click="removeApplication(job._id)">Cancel Application</button>
+            <ui-button @click="removeApplication(job._id)" color="red" :size="size">Cancel</ui-button>
           </td>
         </tr>
       </table>
+      <ui-alert @dismiss="showAlert1 = false" v-if="showAlert1">
+            Welcome, {{ getUser }}!
+      </ui-alert>
+      <ui-alert @dismiss="showAlert2 = false" type="success" v-show="showAlert2">
+          {{successMessage}}
+      </ui-alert>
+      <ui-alert @dismiss="showAlert4 = false" type="error" v-show="showAlert4">
+          {{errorMessage}}
+      </ui-alert>
     </div>
+    <ui-modal ref="modal6" title="Applicants List">
+        List of applicants for this job:
+        <div>
+            <ul class="list">
+                <li v-for="applicant in aplicantsInModal" :key="applicant">{{ applicant }} <ui-button class="btn-accept-applicant" color="green" :size="small">Accept</ui-button><ui-button color="red" :size="size">Decline</ui-button></li>
+            </ul>
+        </div>
+        <div slot="footer">
+            <!-- <ui-button color="primary">Say Hi</ui-button> -->
+            <ui-button @click="closeModal('modal6')">Close</ui-button>
+        </div>
+    </ui-modal>
   </div>
   </template>
   
   <script>
   import JobsService from '@/services/JobsService';
   import { mapGetters } from 'vuex';
+  import starRating from './starRating.vue';
 
   export default {
     name: "mainContent",
@@ -47,17 +73,33 @@
     computed: {
         ...mapGetters(["isLoggedIn", "getUser", "getUserType", "showSuccess"])
     },
-    comments: {
+    components: {
+      starRating
     },
     data() {
         return {
-            jobAdds: []
+            jobAdds: [],
+            showAlert1: false,
+            aplicantsInModal: [],
+            successMessage: '',
+            errorMessage: '',
         };
     },
     created() {
         this.getJobs();
+        this.showAlert1 = true;
+        setTimeout(() => {
+            this.showAlert1 = false
+        }, 3000)
     },
     methods: {
+      openModal(ref, jobApplicants) {
+            this.$refs[ref].open();
+            this.aplicantsInModal = jobApplicants;
+        },
+        closeModal(ref) {
+            this.$refs[ref].close();
+        },
         appliedToJob(jobApplicants) {
           console.log(jobApplicants);
             return jobApplicants.includes(this.getUser);
@@ -70,7 +112,12 @@
                 }
                 return job;
             });
-            console.log(response);
+            console.log(response.status);
+            this.successMessage = "Successfully applied for job!";
+            this.showAlert2 = true;
+            setTimeout(() => {
+                this.showAlert2 = false
+            }, 2000);
         },
         async removeApplication(id) {
             const response = await JobsService.removeApplication(id, this.getUser);
@@ -215,5 +262,19 @@
       font-size: 16px;
       cursor: pointer;
   }
+  .list {
+    list-style-type: none; /* Remove the default bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+  }
+
+  .list li {
+    display: block; /* Display each list item as a block element */
+    margin-bottom: 5px; /* Add some vertical spacing between list items */
+  }
+  .btn-accept-applicant {
+    margin: 0px 50px;
+  }
   </style>
+  
   

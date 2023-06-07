@@ -5,7 +5,6 @@ const { EmployerUser, EmployeeUser } = require('../models/user');
 
 
 router.post('/employee', async function(req, res) {
-    console.log("asdasd", req.body);
     const { name, surname, username, password, email, phone, city, country, address, idCatdNumber, citizenship,
     languages } = req.body;
     let out = null;
@@ -20,7 +19,6 @@ router.post('/employee', async function(req, res) {
         if (out) {
             throw new Error('User with this username already exists');
         } 
-        console.log("asdasdasd")
         const newUser = new EmployeeUser({
             Name: name, Surname: surname, Username: username, Password: password, Email: email, Phone: phone, City: city,
             Country: country, Address: address, IdCardNumber: idCatdNumber, Citizenship: citizenship

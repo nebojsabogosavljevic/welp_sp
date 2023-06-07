@@ -43,6 +43,12 @@
                 <button @click="editJob()" v-on:keyup.enter="editJob()" class="job-add">Update Job</button>
            </div>
        </div>
+       <ui-alert @dismiss="showAlert2 = false" type="success" v-show="showAlert2">
+                Job Successfully Updated!
+        </ui-alert>
+        <ui-alert @dismiss="showAlert4 = false" type="error" v-show="showAlert4">
+                Error! Please try again.
+        </ui-alert>
     </div>
 </template>
 
@@ -73,7 +79,9 @@ export default {
             jobDuration: "",
             jobPrice: "",
             jobDescription: "",
-            jobHardness: ""
+            jobHardness: "",
+            showAlert2: false,
+            showAlert4: false
         }
     },
     created() {
@@ -94,6 +102,7 @@ export default {
     methods: {
         async editJob() {
             const job = {
+                _id: this.$route.query._id,
                 Title: this.jobTitle,
                 Category: this.jobCategory,
                 Location: this.jobLocation,
@@ -106,9 +115,17 @@ export default {
             }
             const resp = await JobsService.editJob(job)
             if (resp === 200) {
-                alert("Job added successfully")
+                this.showAlert2 = true;
+                setTimeout(() => {
+                    this.showAlert2 = false;
+                    this.$router.push({ name: 'homePage' })
+                }, 1000);
             } else {
-                alert("Job not added")
+                this.showAlert4 = true;
+                setTimeout(() => {
+                    this.showAlert4 = true;
+                    this.$router.push({ name: 'homePage' })
+                }, 1000);
             }
         }
     }

@@ -4,8 +4,11 @@ import VueRouter from 'vue-router'
 import routes from './routes'
 import store from './store/index'
 import axios from 'axios'
+import KeenUI from 'keen-ui';
+import 'keen-ui/dist/keen-ui.css';
 
 Vue.use(VueRouter)
+Vue.use(KeenUI);
 const router = new VueRouter({
   routes,
   mode: 'history'

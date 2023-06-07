@@ -112,4 +112,10 @@ p,.text{
   width: 200px;
   padding: 100px;
 }
+.ui-alert {
+        width: 260px !important;
+        position: fixed !important;
+        top: 80px !important;
+        right: 10px !important;
+  }
 </style>

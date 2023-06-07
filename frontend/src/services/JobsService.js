@@ -60,5 +60,17 @@ export default {
         }
         let res = await axios.request(options);
         return res.status;
+    },
+    async editJob(job) {
+        const options = {
+            method: 'PUT',
+            url: `http://localhost:8000/jobs/${job._id}`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: job,
+        }
+        let res = await axios.request(options);
+        return res.status;
     }
 }

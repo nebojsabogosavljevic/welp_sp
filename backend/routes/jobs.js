@@ -30,6 +30,7 @@ router.post('/', async function(req, res, next) {
 });
 
 router.put('/:id', async function(req, res, next) {
+    console.log(req.body);
     const id = req.params.id;
     await Job.updateOne({ _id: new ObjectId(id) }, req.body);
     const prod = await Job.findById(id);

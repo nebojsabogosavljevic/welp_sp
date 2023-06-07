@@ -25,13 +25,6 @@ const userSchemaEmployees = new Schema({
     Address: String,
     IdCardNumber: String,
     Citizenship: String,
-    // Resident: Boolean,
-    // Education: String,
-    // Experience: String,
-    // Languages: String,
-    // Skills: String,
-    // Cv: String,
-    // ProfilePicture: String,
 });
 
 const EmployerUser = mongoose.model('EmployerUser', userSchemaEmployers, 'Employers');
